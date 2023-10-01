@@ -45,9 +45,9 @@ function checarVitoria(tabuleiro, player) {
     let jogar = tabuleiro.reduce((a, e, i) => (e === player) ? a.concat(i) : a, []);
     let venceuJogo = null;
 
-    for(let [index, vitoria] of combinacoesVencedoras.entries()) {
-        if(vitoria.every(elem => jogar.indexOf(elem) > -1)) {
-            venceuJogo = {index: index, player: player}; // indentificar qual jogador venceu e com qual combinação
+    for (let [index, vitoria] of combinacoesVencedoras.entries()) {
+        if (vitoria.every(elem => jogar.indexOf(elem) > -1)) {
+            venceuJogo = { index: index, player: player };
             break;
         }
     }
@@ -82,24 +82,14 @@ function melhorJogada() {
 }
 
 function checarEmpate() {
-    
-    if(casasVazias().length == 0) { // Se o número de casas vazias for igual a 0 e ninguém venceu, foi empate
-        for(var i = 0; i < casas.length; i++) {
-            casas[i].style.backgroundColor = "green"; // Todas as casas são marcadas em verde
-            casas[i].removeEventListener('click', clickRodada, false); // O jogador não pode mais clicar
+    if (casasVazias().length == 0) {
+        for (var i = 0; i < casas.length; i++) {
+            casas[i].style.backgroundColor = "green";
+            casas[i].removeEventListener('click', clickRodada, false);
         }
 
-        if (!checarVitoria()) {
-            declararVencedor("Empate!");
-            return true;
-        }
-
-        // if(checarVitoria()) {
-        //     return venceuJogo
-        // } else {
-        //     declararVencedor("Empate!");
-        //     return true;
-        // }
+        declararVencedor("Empate!"); // Movendo esta linha para fora do if
+        return true;
     }
 
     return false;
@@ -107,22 +97,25 @@ function checarEmpate() {
 
 function minimax(novoTabuleiro, player) {
     var casasDisponiveis = casasVazias(novoTabuleiro);
+    var venceuJogador = checarVitoria(novoTabuleiro, jogador);
+    var venceuIA = checarVitoria(novoTabuleiro, ia);
 
-    if(checarVitoria(novoTabuleiro, player)) {
-        return {score: -10};
-    } else if(checarVitoria(novoTabuleiro, ia)) {
-        return {score: 10};
-    } else if(casasDisponiveis.length === 0) {
-        return {score: 0};
+    if (venceuJogador) {
+        return { score: -10 };
+    } else if (venceuIA) {
+        return { score: 10 };
+    } else if (casasDisponiveis.length === 0) {
+        return { score: 0 };
     }
 
-    var jogada = [];
-    for(var i = 0; i < casasDisponiveis.length; i++) {
+    var jogadas = [];
+
+    for (var i = 0; i < casasDisponiveis.length; i++) {
         var jogadaAtual = {};
         jogadaAtual.index = novoTabuleiro[casasDisponiveis[i]];
         novoTabuleiro[casasDisponiveis[i]] = player;
 
-        if(player == ia) {
+        if (player === ia) {
             var resultado = minimax(novoTabuleiro, jogador);
             jogadaAtual.score = resultado.score;
         } else {
@@ -131,30 +124,30 @@ function minimax(novoTabuleiro, player) {
         }
 
         novoTabuleiro[casasDisponiveis[i]] = jogadaAtual.index;
-        jogada.push(jogadaAtual);
+        jogadas.push(jogadaAtual);
     }
 
-    var melhoropcao;
+    var melhorJogada;
 
-    if(player === ia) {
-        var melhorPontuacao = -10000;
-        
-        for(var i = 0; i < jogada.length; i++) {
-            if(jogada[i].score > melhorPontuacao) {
-                melhorPontuacao = jogada[i].score;
-                melhoropcao = i;
+    if (player === ia) {
+        var melhorPontuacao = -Infinity;
+
+        for (var i = 0; i < jogadas.length; i++) {
+            if (jogadas[i].score > melhorPontuacao) {
+                melhorPontuacao = jogadas[i].score;
+                melhorJogada = i;
             }
         }
     } else {
-        var melhorPontuacao = 10000;
-        
-        for(var i = 0; i < jogada.length; i++) {
-            if(jogada[i].score < melhorPontuacao) {
-                melhorPontuacao = jogada[i].score;
-                melhoropcao = i;
+        var melhorPontuacao = Infinity;
+
+        for (var i = 0; i < jogadas.length; i++) {
+            if (jogadas[i].score < melhorPontuacao) {
+                melhorPontuacao = jogadas[i].score;
+                melhorJogada = i;
             }
         }
     }
 
-    return jogada[melhoropcao];
+    return jogadas[melhorJogada];
 }
