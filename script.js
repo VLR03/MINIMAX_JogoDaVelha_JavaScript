@@ -26,11 +26,62 @@ function iniciarJogo() {
     }
 }
 
+function escolherQuemComeca(quemComeca) {
+    if (quemComeca === 'jogador') {
+        jogadorComeca();
+    } else {
+        iaComeca();
+    }
+}
+
+function jogadorComeca() {
+    jogadorPodeJogar = true; // Permitir que o jogador comece
+    iniciarJogo(); // Reiniciar o jogo
+    checarEmpate();
+}
+
+function iaComeca() {
+    iaComeu =  true;
+    jogadorPodeJogar = false; // Impedir que o jogador comece
+    iniciarJogo(); // Reiniciar o jogo
+
+    var empate = checarEmpate(); // Verificar se o jogo termina em empate
+    console.log("TuUUUU", empate);
+    if (empate) {
+        // Exibe a mensagem de empate quando o jogo empata
+        declararVencedor("Empate!");
+        console.log("EUUUU", empate)
+    } else {
+        setTimeout(function () {
+            rodada(melhorJogada(), ia); // A IA começa após um segundo
+            jogadorPodeJogar = true; // Permitir que o jogador faça sua jogada
+            checarEmpate();
+        }, 1000);
+    }
+}
+
+let jogadorPodeJogar = true; // Adicione essa variável global
+
 function clickRodada(quadrado) {
-    if(typeof tabuleiroOriginal[quadrado.target.id] == 'number') {
-        rodada(quadrado.target.id, jogador); // identificando onde o jogador marcou
-        if(!checarEmpate()) rodada(melhorJogada(), ia); // Checa se é um empate
-    } // Checa se já foram efetuadas jogadas nas casas
+    if (jogadorPodeJogar && typeof tabuleiroOriginal[quadrado.target.id] == 'number') {
+        jogadorPodeJogar = false; // Desabilita os eventos de clique do jogador temporariamente
+        rodada(quadrado.target.id, jogador);
+
+        var empate = checarEmpate(); // Verificar se o jogo termina em empate
+        console.log("TuUUUU", empate);
+        if (empate) {
+            // Exibe a mensagem de empate quando o jogo empata
+            declararVencedor("Empate!");
+            console.log("EUUUU", empate)
+        }
+
+        if (!checarEmpate()) {
+            setTimeout(function () {
+                rodada(melhorJogada(), ia); // Chama a função da IA após um segundo
+                jogadorPodeJogar = true; // Habilita os eventos de clique do jogador novamente
+            }, 1000); // Atraso de um segundo (1000 milissegundos)
+        }
+    }
 }
 
 function rodada(quadradoId, player) {
@@ -82,12 +133,21 @@ function melhorJogada() {
 }
 
 function checarEmpate() {
-    if (casasVazias().length == 0) {
-        for (var i = 0; i < casas.length; i++) {
-            casas[i].style.backgroundColor = "green";
-            casas[i].removeEventListener('click', clickRodada, false);
+    console.log('AAAAAAAAAAAAA', casasVazias().length);
+    if ((casasVazias().length == 0 || (casasVazias().length == 1 && iaComeu)) || (casasVazias().length == 0 || (casasVazias().length == 1 && jogadorPodeJogar))) {
+        console.log("filho a puta5");
+        if(jogadorPodeJogar == true){
+            rodada(melhorJogada(), ia);
+        } else {
+            console.log("filho a puta");
+            for (var i = 0; i < casas.length; i++) {
+                casas[i].style.backgroundColor = "green";
+                casas[i].removeEventListener('click', clickRodada, false); 
+            }
+            // rodada(melhorJogada(), ia);
+            declararVencedor("Empate!"); // Movendo esta linha para fora do if
         }
-
+        rodada(melhorJogada(), ia);
         declararVencedor("Empate!"); // Movendo esta linha para fora do if
         return true;
     }
