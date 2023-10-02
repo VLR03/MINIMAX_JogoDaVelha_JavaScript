@@ -60,6 +60,19 @@ function iaComeca() {
     }
 }
 
+const playerComecaBtn = document.querySelector('.playerComeca');
+const iaComecaBtn = document.querySelector('.iaComeca');
+
+playerComecaBtn.addEventListener('click', () => {
+    playerComecaBtn.classList.add('playerSelecionado');
+    iaComecaBtn.classList.remove('iaSelecionado');
+});
+
+iaComecaBtn.addEventListener('click', () => {
+    iaComecaBtn.classList.add('iaSelecionado');
+    playerComecaBtn.classList.remove('playerSelecionado');
+});
+
 let jogadorPodeJogar = true; // Adicione essa variável global
 
 function clickRodada(quadrado) {

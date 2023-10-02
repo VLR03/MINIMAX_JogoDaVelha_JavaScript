@@ -1,4 +1,4 @@
-td {
+/* td {
     border: 2px solid #333;
     height: 100px;
     width: 100px;
@@ -47,4 +47,104 @@ table tr td:last-child {
     border-radius: 5px;
     color: white;
     font-size: 2em;
+} */
+
+body {
+    font-family: "Comic Sans MS", cursive, sans-serif;
+    background-image: url('https://blog.br.playstation.com/tachyon/sites/4/2023/02/babee9c954509a0d34a67e7d125b679096ef9d79-scaled.jpg'); /* Substitua 'bg.jpg' pelo nome da sua imagem */
+    background-size: cover; /* Garante que a imagem cubra todo o fundo */
+    background-repeat: no-repeat; /* Evita repetição da imagem */
+    background-attachment: fixed; /* Fixa a imagem para que ela não role com o conteúdo */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; /* Isso centralizará verticalmente a página inteira */
+}
+
+/* body {
+    font-family: "Comic Sans MS", cursive, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; /* Isso centralizará verticalmente a página inteira 
+} */
+
+.container {
+    text-align: center;
+}
+
+.title {
+    font-size: 36px;
+    color: #333;
+}
+
+.game {
+    margin-top: 20px;
+}
+
+table {
+    border-collapse: collapse;
+    margin: 0 auto;
+}
+
+.cell {
+    width: 100px;
+    height: 100px;
+    border: 2px solid #333;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 70px;
+    cursor: pointer;
+    background-color: #fff;
+    transition: background-color 0.3s ease;
+}
+
+.cell:hover {
+    background-color: #ddd;
+}
+
+.fimDeJogo {
+    display: none;
+    width: 200px;
+    margin: 20px auto;
+    background-color: rgb(87, 87, 87);
+    padding: 20px;
+    text-align: center;
+    border-radius: 5px;
+    color: white;
+    font-size: 1.5em;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Adiciona uma sombra suave */
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.playerComeca, .iaComeca {
+    background-color: #333;
+    color: #fff;
+    font-size: 20px;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin: 0 10px; /* Espaçamento entre os botões */
+    outline: none; /* Remove a borda de foco ao clicar */
+}
+
+.playerSelecionado, .iaSelecionado {
+    background-color: #b86805; /* Cor ao clicar */
+}
+
+.playerComeca:hover, .iaComeca:hover {
+    background-color: #b86805;
 }
